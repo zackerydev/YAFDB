@@ -1,6 +1,6 @@
 {
   "name": "nfldb",
-  "developers": "Duy Ho",
+  "developers": "Duy Ho, Jedrzej Kosinski",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
