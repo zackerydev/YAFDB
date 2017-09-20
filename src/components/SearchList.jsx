@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import nflTeams from './nflteams.json';
 import '../css/SearchList.css';
+import StatView from './StatView';
 export default class SearchList extends Component {
 	constructor() {
 		super();
 		this.state = {
 			contents: nflTeams.NFLTeams,
-			query: ""
+			query: "",
+			selected: nflTeams.NFLTeams[0]
 		}
 	}
 
@@ -36,21 +38,30 @@ export default class SearchList extends Component {
 		}
 		
 	}
+
+	handleClick(idx) {
+		this.setState({selected: this.state.contents[idx]})
+	}
 	render() {
-		return (
-				<div className="searchList" style={{width: "25%"}}>
-					<div className="sLHeader" style={{padding: "20px", fontWeight: "700", border: "black solid 4px"}}>
-						<input type="search" placeholder="Search..." style={{padding: "15px", width: "100%"}} onChange={this.filterContent.bind(this)}/>
+		var self = this;
+		return (<div className="horzWrapper">
+					<div className="searchList" style={{width: "25%", minWidth: "400px", overflow: "hidden", float: "left"}}>
+						<div className="sLHeader" style={{padding: "20px", fontWeight: "700", border: "black solid 4px"}}>
+							<input type="search" placeholder="Search..." style={{padding: "15px", width: "100%"}} onChange={this.filterContent.bind(this)}/>
+						</div>
+		
+						<div className="sLContents">
+							<ul style={{overflowY: "auto", height: "75vh", paddingLeft: "0", marginTop: "0"}}>
+								{this.state.contents.map((val, idx) => {
+									var self = this;
+									return <a href="#" key={idx} onClick={this.handleClick.bind(this, idx)}> <li className="slItem" key={idx} > {val.fullName} </li> </a>
+								})}
+							</ul>
+						</div>
 					</div>
-	
-					<div className="sLContents">
-						<ul style={{overflowY: "auto", maxHeight: "100vh"}}>
-							{this.state.contents.map(function(val, idx) {
-								return <li className="slItem" key={idx}> {val.fullName} </li>
-							})}
-						</ul>
+					<div className="statView" style={{display: "inline-block"}}>
+						<StatView selected={this.state.selected} />
 					</div>
-			
 				</div>
 			)
 	}
