@@ -1,0 +1,13 @@
+.slItem {
+	list-style: none;
+	height: 40px;
+	border-bottom: black solid 2px;
+	padding-top: 20px;
+	border-left: black solid 2px;
+}
+
+.slItem:hover {
+	background-color: #7FDBFF;
+	color: black;
+	font-weight: 700;
+}
