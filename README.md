@@ -7,6 +7,7 @@ The only program *needed* for this project is Node.js which you can find here: h
   2. Clone the repository into a directory of your choice
   3. Navigate to the directory where you just cloned the repo, with Cmder this will be `cd C:\your\repo\dir`
   4. Run the command `npm install` and node will install all the packages needed
+  5. Navigate to the `/server` directory and run `npm install` again to get the packages the server needs
   5. Now that the packages are all installed run the command `npm run dev-api` this starts a local development Express.js "Server" on your machine that mimics the way the actual server handles API requests so we can run the website locally. It will also automatically reload when server files change
   6. Open a new tab in Cmder (or a new command prompt window) and run `npm start` in the same directory. This starts up the actual react app and loads the front end. It should automatically open a window for you and reload on changes.
   7. To stop, all you need to do is press CTRL+C and type `y` to the prompt. 
