@@ -4,13 +4,21 @@ import './App.css';
 import Header from './components/Header.jsx'
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Header />
-        </div>
-    );
-  }
-}
+	state = {
+		users: []
+	}
+	componentDidMount() {
+		fetch('/users')
+      .then(res => res.json())
+      .then(users => console.log(users));
+	}
+	render() {
+	return (
+	  		<div className="App">
+	    		<Header />
+	    	</div>
+			);
+		}
+	}
 
 export default App;
