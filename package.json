@@ -1,6 +1,6 @@
 {
   "name": "nfldb",
-  "developers": "Duy Ho, Jedrzej Kosinski",
+  "developers": "Duy Ho, Jedrzej Kosinski, Zackery Griesinger, Connor Eaton",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,8 +10,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev-api": "nodemon --watch server ./server/bin/www",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:8081"
 }
