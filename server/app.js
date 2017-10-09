@@ -27,7 +27,7 @@ app.use('/users', users);
 
 app.get('/*', function (req, res) {
     // console.log("Getting file from:", path.join(__dirname, '/../build', 'index.html'), headerResult.name)
-     res.sendFile(path.join(__dirname, '/../build', 'index.html'));
+     res.sendFile(path.join(__dirname, '../build', 'index.html'));
   });
 
 // catch 404 and forward to error handler
