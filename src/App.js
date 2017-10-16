@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Header from './components/Header.jsx'
 
@@ -8,7 +7,7 @@ class App extends Component {
 		users: []
 	}
 	componentDidMount() {
-		fetch('/users')
+		fetch('/db/users')
       .then(res => res.json())
       .then(users => console.log(users));
 	}
