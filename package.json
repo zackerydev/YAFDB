@@ -7,11 +7,7 @@
     "mysql": "^2.15.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.13",
-    "semantic-ui": "^2.2.13",
-    "semantic-ui-css": "^2.2.12",
-    "semantic-ui-less": "^2.2.12",
-    "semantic-ui-react": "^0.74.2"
+    "react-scripts": "1.0.13"
   },
   "scripts": {
     "start": "react-scripts start",

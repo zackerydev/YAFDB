@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import SearchList from './SearchList.jsx'
-import {Header as H} from 'semantic-ui-react'
 
 export default class Header extends Component {
 	constructor() {
@@ -9,7 +8,6 @@ export default class Header extends Component {
 
 	render() {
 		return(<div className='siteWrapper'>
-			<H as='h1'> Yet Another Football Database </H>
 			<div className='header' style={{
 				height: '80px',
 				paddingTop: '30px',
