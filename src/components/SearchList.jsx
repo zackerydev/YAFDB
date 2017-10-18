@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import nflTeams from './nflteams.json';
 import '../css/SearchList.css';
 import StatView from './StatView';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import {List, ListItem, makeSelectable} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
+import FavBorder from 'material-ui/svg-icons/toggle/star-border';
+import FavIcon from 'material-ui/svg-icons/toggle/star';
+import Checkbox from 'material-ui/Checkbox';
+import {yellow500} from 'material-ui/styles/colors';
 export default class SearchList extends Component {
 	constructor() {
 		super();
@@ -46,15 +55,32 @@ export default class SearchList extends Component {
 		var self = this;
 		return (<div className="horzWrapper">
 					<div className="searchList" style={{width: "25%", minWidth: "400px", overflow: "hidden", float: "left"}}>
-						<div className="sLHeader" style={{padding: "20px", fontWeight: "700", border: "black solid 4px"}}>
-							<input type="search" placeholder="Search..." style={{padding: "15px", width: "100%"}} onChange={this.filterContent.bind(this)}/>
+						<div className="sLHeader" style={{borderBottom: "black solid 4px", borderRight: "black solid 4px"}}>
+							<TextField
+								style={{}}
+								hintText="Hint Text"
+								floatingLabelText="Search..."
+								onChange={this.filterContent.bind(this)}
+								/>
 						</div>
 		
 						<div className="sLContents">
 							<ul style={{overflowY: "auto", height: "75vh", paddingLeft: "0", marginTop: "0"}}>
 								{this.state.contents.map((val, idx) => {
 									var self = this;
-									return <a href="#" key={idx} onClick={this.handleClick.bind(this, idx)}> <li className="slItem" key={idx} > {val.fullName} </li> </a>
+									return <div key={idx}>
+											<Divider />
+											<ListItem
+											onClick={this.handleClick.bind(this, idx)} 
+											value={idx+1}
+											 primaryText={val.fullName} 
+											 secondaryText={val.code} 
+											rightIcon={<Checkbox 
+											checkedIcon={<FavIcon color={yellow500}/>}
+											uncheckedIcon={<FavBorder color={yellow500}/>}/>}
+											/>
+											
+											</div>
 								})}
 							</ul>
 						</div>
