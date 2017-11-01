@@ -3,16 +3,20 @@ import './App.css';
 import Header from './components/Header.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {red500, red700, grey900, darkBlack} from 'material-ui/styles/colors';
+import {red500, red700, grey900, darkBlack, grey400} from 'material-ui/styles/colors';
 
 class App extends Component {
-	state = {
-		users: []
+	constructor() {
+		super()
+		this.state = {
+			users: []
+		}
 	}
+	
 	componentDidMount() {
 		fetch('/db/users')
-      .then(res => res.json())
-      .then(users => console.log(users));
+			.then(res => res.json())
+			.then(users => console.log(users))
 	}
 	render() {
 		const muiTheme = getMuiTheme({
@@ -23,15 +27,15 @@ class App extends Component {
 				accent2Colro: red700
 
 			}
-		});
-	return (
-	  		<div className="App">
+		})
+		return (
+			<div className="App">
 				<MuiThemeProvider muiTheme={muiTheme}>
-	    			<Header />
+					<Header />
 				</MuiThemeProvider>
-	    	</div>
-			);
-		}
+			</div>
+		)
 	}
+}
 
 export default App;

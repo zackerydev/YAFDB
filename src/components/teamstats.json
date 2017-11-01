@@ -1,0 +1,22 @@
+{
+    "ARI": {
+        "passing_yards": 1888,
+        "rushing_yards": 444,
+        "first_downs": 137,
+        "total_yards": 2332,
+        "sacks": 13,
+        "field_goals": 10,
+        "fg_attempts": 15,
+        "touchdowns": 13
+    },
+    "ATL": {
+        "passing_yards": 1234,
+        "rushing_yards": 222,
+        "first_downs": 12,
+        "total_yards": 2332,
+        "sacks": 4,
+        "field_goals": 11,
+        "fg_attempts": 20,
+        "touchdowns": 118
+    }
+}
