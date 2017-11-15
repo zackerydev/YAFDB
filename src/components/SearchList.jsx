@@ -91,13 +91,14 @@ export default class SearchList extends Component {
 		//var self = this
 		return (<div className='horzWrapper'>
 			<div className='searchList' style={{width: '25%', minWidth: '400px', overflow: 'hidden', float: 'left'}}>
-				<div className='sLHeader' style={{borderBottom: 'black solid 4px', borderRight: 'black solid 4px'}}>
-									
+				<div className='sLHeader'>
+							
 	
 					<TextField
-						style={{width: "100%", height: "100%", padding: "20px"}}
-						hintText='Hint Text'
+						style={{width: "80%", height: "100%", padding: "20px"}}
+						hintText='Type here to search!'
 						floatingLabelText='Search...'
+						floatingLabelFixed={true}
 						onChange={this.filterContent.bind(this)}/>
 				</div>
 
@@ -116,16 +117,14 @@ export default class SearchList extends Component {
 										checkedIcon={<FavIcon color={yellow500}/>}
 										uncheckedIcon={<FavBorder color={yellow500}/>}
 									/>}
-								/>
+								/>	
 									
 						})}
 						</SelectableList>
 					</ul>
 				</div>
 			</div>
-			<div className='statView' style={{display: 'inline-block'}}>
-				<StatView selected={this.state.selected} />
-			</div>
+			<StatView selected={this.state.selected} />
 		</div>
 		)
 	}
