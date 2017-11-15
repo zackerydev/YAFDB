@@ -6,6 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import LoginContent from './LoginContent.jsx'
 import SignupContent from './SignupContent.jsx'
+import {Tabs, Tab} from 'material-ui/Tabs'
+import Playoffs from './Playoffs.jsx'
 
 export default class Header extends Component {
 	constructor() {
@@ -55,8 +57,20 @@ export default class Header extends Component {
 
 			<LoginContent dialog={this.state.loginFlag} close={this.closeLogin} />
 			<SignupContent dialog={this.state.signupFlag} close={this.closeSignUp}/>	
+			<Tabs>
+				<Tab label="Teams">
+					<SearchList />
+				</Tab>
+				<Tab label="Players">
+					<SearchList />
+				</Tab>
+				<Tab label="Playoffs">
+					<div>
+						<Playoffs />
+					</div>
+				</Tab>
+			</Tabs>
 
-			<SearchList />
 		</div>
 		)
 	}
