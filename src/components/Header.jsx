@@ -15,10 +15,21 @@ export default class Header extends Component {
 		this.state = {
 			logged: false,
 			loginFlag: false,
-			signupFlag: false
+			signupFlag: false,
+			teamContent: [],
+			playerContent: [],
+			loaded: false
 		}		
 	}
 
+	componentWillMount() {
+		fetch('/db/teams')
+			.then(res => res.json())
+			.then(teams => {
+				console.log
+				this.setState({teamContent: teams, loaded: true});
+			});
+	}
 
 	loginPopUp = () => {
 		this.setState({loginFlag: true})
@@ -34,7 +45,7 @@ export default class Header extends Component {
 	}
 	render() {
 		var BarButtons;
-
+		console.log(this.state)
 		if(this.state.logged) {
 			BarButtons = <div style={{display: "inline-block"}}>
 			</div>
@@ -50,28 +61,33 @@ export default class Header extends Component {
 									onClick={this.signupPopUp}/>
 							</div>
 		}
-		return(<div className='siteWrapper'>
-			<AppBar
-				title="Yet Another Football Database" 
-				iconElementRight={BarButtons}/>
+		var AppView;
+		if(this.state.loaded) {
+			AppView = <div className='siteWrapper'>
+					<AppBar
+						title="Yet Another Football Database" 
+						iconElementRight={BarButtons}/>
 
-			<LoginContent dialog={this.state.loginFlag} close={this.closeLogin} />
-			<SignupContent dialog={this.state.signupFlag} close={this.closeSignUp}/>	
-			<Tabs>
-				<Tab label="Teams">
-					<SearchList />
-				</Tab>
-				<Tab label="Players">
-					<SearchList />
-				</Tab>
-				<Tab label="Playoffs">
-					<div>
-						<Playoffs />
+					<LoginContent dialog={this.state.loginFlag} close={this.closeLogin} />
+					<SignupContent dialog={this.state.signupFlag} close={this.closeSignUp}/>	
+					<Tabs>
+						<Tab label="Teams">
+							<SearchList content={this.state.teamContent}/>
+						</Tab>
+						<Tab label="Players" >
+							<SearchList content={this.state.teamContent}/>
+						</Tab>
+						<Tab label="Playoffs">
+							<div>
+								<Playoffs content={this.state.teamContent}/>
+							</div>
+						</Tab>
+					</Tabs>
 					</div>
-				</Tab>
-			</Tabs>
+		} else {
+			AppView = <div className="siteWrapper"> HELLO WORLD </div>
+		}
 
-		</div>
-		)
+		return(<div> {AppView} </div>);
 	}
 }

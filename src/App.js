@@ -14,9 +14,6 @@ class App extends Component {
 	}
 	
 	componentDidMount() {
-		fetch('/db/teams')
-			.then(res => res.json())
-			.then(users => console.log(users))
 	}
 	render() {
 		const muiTheme = getMuiTheme({

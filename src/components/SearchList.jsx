@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import nflTeams from './nflteams.json'
 import '../css/SearchList.css'
 import StatView from './StatView'
 import TextField from 'material-ui/TextField'
@@ -11,6 +10,7 @@ import Checkbox from 'material-ui/Checkbox'
 import {yellow500} from 'material-ui/styles/colors'
 import PropTypes from 'prop-types'
 import Subheader from 'material-ui/Subheader'
+import axios from 'axios';
 
 let SelectableList = makeSelectable(List);
 
@@ -24,7 +24,8 @@ function wrapState(ComposedComponent) {
     componentWillMount() {
       this.setState({
         selectedIndex: this.props.defaultValue,
-      });
+			});
+			
     }
 
     handleRequestChange = (event, index) => {
@@ -49,32 +50,28 @@ function wrapState(ComposedComponent) {
 SelectableList = wrapState(SelectableList)
 
 export default class SearchList extends Component {
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
 		this.state = {
-			contents: nflTeams.NFLTeams,
+			contents:this.props.content,
 			query: '',
-			selected: nflTeams.NFLTeams[0]
+			selected: "Green",
+			all: this.props.content,
+			stats: {}
 		}
-	}
-
-	componentWillMount() {
-		//This gets called any time the search bar is rendered (all the time)
-		// What we do is create a list of objects of the stuff that goes in the search bar
-		// Placeholder object is in the nflteams.json file, we will remove this later
-
 	}
 
 	filterContent(e) {
 		var newQuery = e.target.value
 		var newContents = []
 		if(newQuery === '') {
-			this.setState({contents: nflTeams.NFLTeams})
+			this.setState({contents: this.state.all})
 		} else {
-			for(var i = 0; i < nflTeams.NFLTeams.length; i++) {
-				for(var key in nflTeams.NFLTeams[i]) {
-					if(nflTeams.NFLTeams[i][key].toLowerCase().indexOf(newQuery.toLowerCase()) !== -1){
-						newContents.push(nflTeams.NFLTeams[i])
+			var NFLTeams = this.state.contents;
+			for(var i = 0; i < NFLTeams.length; i++) {
+				for(var key in NFLTeams[i]) {
+					if(NFLTeams[i][key].toLowerCase().indexOf(newQuery.toLowerCase()) !== -1){
+						newContents.push(NFLTeams[i])
 						break
 					}
 				}
@@ -85,9 +82,20 @@ export default class SearchList extends Component {
 	}
 
 	handleClick(idx) {
+		var self = this;
+		axios.get('/db/team/stats', 
+		{
+			params: {
+			team_name: this.state.contents[idx].name
+			}
+		}, function(response) {
+			console.log(response)
+		})
 		this.setState({selected: this.state.contents[idx]})
 	}
 	render() {
+		console.log(this.state);
+		var cont = this.state.contents;
 		//var self = this
 		return (<div className='horzWrapper'>
 			<div className='searchList' style={{width: '25%', minWidth: '400px', overflow: 'hidden', float: 'left'}}>
@@ -106,12 +114,12 @@ export default class SearchList extends Component {
 					<ul style={{overflowY: 'auto', height: '75vh', paddingLeft: '0', marginTop: '0'}}>
 						<SelectableList defaultValue={1}>
 
-						{this.state.contents.map((val, idx) => {
+						{cont.map((val, idx) => {
 							//var self = this
 							return <ListItem
 									onClick={this.handleClick.bind(this, idx)} 
 									value={idx+1}
-									primaryText={val.fullName} 
+									primaryText={val.name}
 									secondaryText={val.code} 
 									rightIcon={<Checkbox 
 										checkedIcon={<FavIcon color={yellow500}/>}

@@ -1,0 +1,13 @@
+"use strict";Object.defineProperty(exports, "__esModule", { value: true });var _jsxFileName = "/home/datamgr/YAFDB/src/components/StatView.jsx";var _react = require("react");var _react2 = _interopRequireDefault(_react);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+class StatView extends _react.Component {
+	constructor() {
+		super();
+	}
+
+	render() {
+		return _react2.default.createElement("div", { className: "statView", style: { float: "left" }, __source: { fileName: _jsxFileName, lineNumber: 9 }, __self: this },
+			_react2.default.createElement("h1", { __source: { fileName: _jsxFileName, lineNumber: 10 }, __self: this }, " ", this.props.selected.fullName, " "), "Stats will go here");
+
+
+	}}exports.default = StatView;

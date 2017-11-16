@@ -1,0 +1,67 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _jsxFileName = '/home/datamgr/YAFDB/src/components/SearchList.jsx';var _react = require('react');var _react2 = _interopRequireDefault(_react);
+var _nflteams = require('./nflteams.json');var _nflteams2 = _interopRequireDefault(_nflteams);
+require('../css/SearchList.css');
+var _StatView = require('./StatView');var _StatView2 = _interopRequireDefault(_StatView);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+class SearchList extends _react.Component {
+	constructor() {
+		super();
+		this.state = {
+			contents: _nflteams2.default.NFLTeams,
+			query: "",
+			selected: _nflteams2.default.NFLTeams[0] };
+
+	}
+
+	componentWillMount() {
+		//This gets called any time the search bar is rendered (all the time)
+		// What we do is create a list of objects of the stuff that goes in the search bar
+		// Placeholder object is in the nflteams.json file, we will remove this later
+
+	}
+
+	filterContent(e) {
+		var newQuery = e.target.value;
+		var newContents = [];
+		if (newQuery === "") {
+			this.setState({ contents: _nflteams2.default.NFLTeams });
+		} else {
+			for (var i = 0; i < _nflteams2.default.NFLTeams.length; i++) {
+				for (var key in _nflteams2.default.NFLTeams[i]) {
+					if (_nflteams2.default.NFLTeams[i][key].toLowerCase().indexOf(newQuery.toLowerCase()) !== -1) {
+						newContents.push(_nflteams2.default.NFLTeams[i]);
+						break;
+					}
+				}
+			}
+
+			this.setState({ contents: newContents });
+		}
+
+	}
+
+	handleClick(idx) {
+		this.setState({ selected: this.state.contents[idx] });
+	}
+	render() {
+		var self = this;
+		return _react2.default.createElement('div', { className: 'horzWrapper', __source: { fileName: _jsxFileName, lineNumber: 47 }, __self: this },
+			_react2.default.createElement('div', { className: 'searchList', style: { width: "25%", minWidth: "400px", overflow: "hidden", float: "left" }, __source: { fileName: _jsxFileName, lineNumber: 48 }, __self: this },
+				_react2.default.createElement('div', { className: 'sLHeader', style: { padding: "20px", fontWeight: "700", border: "black solid 4px" }, __source: { fileName: _jsxFileName, lineNumber: 49 }, __self: this },
+					_react2.default.createElement('input', { type: 'search', placeholder: 'Search...', style: { padding: "15px", width: "100%" }, onChange: this.filterContent.bind(this), __source: { fileName: _jsxFileName, lineNumber: 50 }, __self: this })),
+
+
+				_react2.default.createElement('div', { className: 'sLContents', __source: { fileName: _jsxFileName, lineNumber: 53 }, __self: this },
+					_react2.default.createElement('ul', { style: { overflowY: "auto", height: "75vh", paddingLeft: "0", marginTop: "0" }, __source: { fileName: _jsxFileName, lineNumber: 54 }, __self: this },
+						this.state.contents.map((val, idx) => {
+							var self = this;
+							return _react2.default.createElement('a', { href: '#', key: idx, onClick: this.handleClick.bind(this, idx), __source: { fileName: _jsxFileName, lineNumber: 57 }, __self: this }, ' ', _react2.default.createElement('li', { className: 'slItem', key: idx, __source: { fileName: _jsxFileName, lineNumber: 57 }, __self: this }, ' ', val.fullName, ' '), ' ');
+						})))),
+
+
+
+			_react2.default.createElement('div', { className: 'statView', style: { display: "inline-block" }, __source: { fileName: _jsxFileName, lineNumber: 62 }, __self: this },
+				_react2.default.createElement(_StatView2.default, { selected: this.state.selected, __source: { fileName: _jsxFileName, lineNumber: 63 }, __self: this })));
+
+
+
+	}}exports.default = SearchList;

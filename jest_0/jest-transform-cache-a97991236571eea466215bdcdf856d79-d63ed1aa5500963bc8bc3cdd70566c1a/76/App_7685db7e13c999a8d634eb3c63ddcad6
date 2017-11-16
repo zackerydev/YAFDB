@@ -1,0 +1,24 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _jsxFileName = '/home/datamgr/YAFDB/src/App.js';var _react = require('react');var _react2 = _interopRequireDefault(_react);
+var _logo = require('./logo.svg');var _logo2 = _interopRequireDefault(_logo);
+require('./App.css');
+var _Header = require('./components/Header.jsx');var _Header2 = _interopRequireDefault(_Header);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+class App extends _react.Component {constructor(...args) {var _temp;return _temp = super(...args), this.
+		state = {
+			users: [] }, _temp;}
+
+	componentDidMount() {
+		fetch('/users').
+		then(res => res.json()).
+		then(users => console.log(users));
+	}
+	render() {
+		return (
+			_react2.default.createElement('div', { className: 'App', __source: { fileName: _jsxFileName, lineNumber: 17 }, __self: this },
+				_react2.default.createElement(_Header2.default, { __source: { fileName: _jsxFileName, lineNumber: 18 }, __self: this })));
+
+
+	}}exports.default =
+
+
+App;
