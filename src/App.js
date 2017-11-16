@@ -14,7 +14,7 @@ class App extends Component {
 	}
 	
 	componentDidMount() {
-		fetch('/db/users')
+		fetch('/db/teams')
 			.then(res => res.json())
 			.then(users => console.log(users))
 	}
