@@ -8,7 +8,8 @@ import LoginContent from './LoginContent.jsx'
 import SignupContent from './SignupContent.jsx'
 import {Tabs, Tab} from 'material-ui/Tabs'
 import Playoffs from './Playoffs.jsx'
-
+import axios from 'axios';
+import CircularProgress  from 'material-ui/CircularProgress';
 export default class Header extends Component {
 	constructor() {
 		super()
@@ -23,12 +24,11 @@ export default class Header extends Component {
 	}
 
 	componentWillMount() {
-		fetch('/db/teams')
-			.then(res => res.json())
-			.then(teams => {
-				console.log
-				this.setState({teamContent: teams, loaded: true});
-			});
+		var self = this;
+		axios.get('/db/teams').then(function(response) {
+			var teamStats = response.data;
+			self.setState({teamContent: teamStats, loaded: true})
+		})
 	}
 
 	loginPopUp = () => {
@@ -45,7 +45,6 @@ export default class Header extends Component {
 	}
 	render() {
 		var BarButtons;
-		console.log(this.state)
 		if(this.state.logged) {
 			BarButtons = <div style={{display: "inline-block"}}>
 			</div>
@@ -72,10 +71,10 @@ export default class Header extends Component {
 					<SignupContent dialog={this.state.signupFlag} close={this.closeSignUp}/>	
 					<Tabs>
 						<Tab label="Teams">
-							<SearchList content={this.state.teamContent}/>
+							<SearchList content={this.state.teamContent} type={"team"}/>
 						</Tab>
 						<Tab label="Players" >
-							<SearchList content={this.state.teamContent}/>
+							<SearchList content={this.state.teamContent} type={"player"}/>
 						</Tab>
 						<Tab label="Playoffs">
 							<div>
@@ -85,7 +84,7 @@ export default class Header extends Component {
 					</Tabs>
 					</div>
 		} else {
-			AppView = <div className="siteWrapper"> HELLO WORLD </div>
+			AppView = <div className="siteWrapper" style={{margin: "auto", marginTop: "400px"}}> <CircularProgress size={80} thickness={5} /> </div>
 		}
 
 		return(<div> {AppView} </div>);

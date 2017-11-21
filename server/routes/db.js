@@ -29,6 +29,21 @@ router.get('/teams', function(req, res, next) {
 	var SQL_QUERY = 'SELECT name, city, state, code, division, conference from team;'
 	connection.connect();
 	connection.query(SQL_QUERY, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+
+})
+router.get('/players', function(req, res, next) {
+	//res.send('respond with a resource')
+	//We will use res.json(DATA_FROM_DB) to send data back
+	var connection = mysql.createConnection(cfg);
+	var SQL_QUERY = `SELECT first_name, last_name, position, number, name as Team_name from team
+	INNER JOIN player ON team.id = player.team_ID
+	ORDER BY Team_name, first_name;`
+	connection.connect();
+	connection.query(SQL_QUERY, (error, results, fields) => {
+		if(error) console.log(error)
 		res.json(results);
 	})
 
@@ -50,7 +65,7 @@ router.get('/team/stats', function(req, res, next) {
 		ON player_game_stats.game_id = ID_SEASON.id
 		INNER JOIN (select name, id from team WHERE name = ?) as SELECTED_TEAM
 		ON SELECTED_TEAM.id = team_id
-		GROUP BY season_year;`
+		GROUP BY season_year, name, team_id;`
 	var inserts = [req.query.team_name];
 	SQL = mysql.format(SQL, inserts);
 	connection.connect();
@@ -60,18 +75,48 @@ router.get('/team/stats', function(req, res, next) {
 
 })
 
+router.get('/player/stats', function(req, res, next) {
+	//res.send('respond with a resource')
+	//We will use res.json(DATA_FROM_DB) to send data back
+	var connection = mysql.createConnection(cfg);
+	var SQL = ` SELECT first_name, last_name, team_id, season_year, sum(passing_yards), sum(passing_attempts), sum(passing_completions)
+				, sum(rushing_yards), sum(rushing_attempts), sum(rushing_touchdowns), sum(receiving_yards)
+				, sum(receiving_catches), sum(receiving_targets), sum(receiving_touchdowns), sum(tackles)
+				, sum(interceptions_thrown), sum(interceptions_caught), sum(fumbles), sum(fumbles_lost)
+				, sum(fumbles_recovered), sum(fumbles_forced), sum(defense_sacks), sum(kicking_fg_made)
+				, sum(kicking_fg_tried), sum(kicking_pat_made), sum(kicking_pat_tried), sum(punts)
+				, sum(punting_yds), sum(kick_return_yds), sum(kick_return_tds), sum(punt_return_yds)
+				from player_game_stats 
+				INNER JOIN (select distinct id, season_year from game) as ID_SEASON 
+				ON player_game_stats.game_id = ID_SEASON.id
+				INNER JOIN (select first_name, last_name, id from player 
+				WHERE first_name = ? AND last_name = ?) as SELECTED_PLAYER
+				ON SELECTED_PLAYER.id = player_id
+				GROUP BY season_year, last_name, team_id;`
+	var inserts = [req.query.first_name, req.query.last_name];
+	SQL = mysql.format(SQL, inserts);
+	//console.log(SQL)
+	connection.connect();
+	connection.query(SQL, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+
+})
+
 router.get('/team/players', function(req, res, next) {
 	//res.send('respond with a resource')
 	//We will use res.json(DATA_FROM_DB) to send data back
 	var connection = mysql.createConnection(cfg);
-	var SQL = `SELECT first_name, last_name, position, number, name as Team_name from TEAM
-	INNER JOIN player ON TEAM.id = PLAYER.team_ID
-	where TEAM.name = ?
+	var SQL = `SELECT first_name, last_name, position, number, name as Team_name from team
+	INNER JOIN player ON team.id = player.team_ID
+	where team.name = ?
 	ORDER BY first_name;`
 	var inserts = [req.query.team_name];
 	SQL = mysql.format(SQL, inserts);
 	connection.connect();
 	connection.query(SQL, (error, results, fields) => {
+		if(error) console.log(error);
 		res.json(results);
 	})
 

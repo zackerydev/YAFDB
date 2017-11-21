@@ -11,7 +11,8 @@ import {yellow500} from 'material-ui/styles/colors'
 import PropTypes from 'prop-types'
 import Subheader from 'material-ui/Subheader'
 import axios from 'axios';
-
+import PlayerList from './PlayerList'
+import CircularProgress from 'material-ui/CircularProgress'
 let SelectableList = makeSelectable(List);
 
 function wrapState(ComposedComponent) {
@@ -55,10 +56,13 @@ export default class SearchList extends Component {
 		this.state = {
 			contents:this.props.content,
 			query: '',
-			selected: "Green",
+			selected: this.props.content[0],
 			all: this.props.content,
-			stats: {}
+			stats: [],
+			players: [],
+			loaded: false
 		}
+		this.getStats(0)
 	}
 
 	filterContent(e) {
@@ -80,24 +84,43 @@ export default class SearchList extends Component {
 		}
 		
 	}
+	getStats = (idx, name) => {
+		var self = this;
+		axios.get('/db/team/stats', 
+			{
+				params: {
+				team_name: self.state.contents[idx].name
+				}
+			}).then(function(response) {
+				var teamStats = response.data;
+				axios.get('/db/team/players', 
+					{
+						params: {
+						team_name: self.state.contents[idx].name
+						}
+					}).then(function(response) {
+						self.setState({loaded: true, selected: self.state.contents[idx], players: response.data, stats: teamStats})
+					})
+			})
+	}
 
 	handleClick(idx) {
 		var self = this;
-		axios.get('/db/team/stats', 
-		{
-			params: {
-			team_name: this.state.contents[idx].name
-			}
-		}, function(response) {
-			console.log(response)
-		})
-		this.setState({selected: this.state.contents[idx]})
+		this.getStats(idx);
+		
 	}
 	render() {
-		console.log(this.state);
 		var cont = this.state.contents;
+		if(this.props.type === "player" && this.state.players !== []) {
+			var display =	<PlayerList selected={this.state.selected} content={this.state.players}/>				
+		} else {
+			var display = <StatView selected={this.state.selected} stats={this.state.stats} players={this.state.players}/>
+
+		}
 		//var self = this
-		return (<div className='horzWrapper'>
+		var body;
+		if(this.state.loaded) {
+			body = <div className='horzWrapper'>
 			<div className='searchList' style={{width: '25%', minWidth: '400px', overflow: 'hidden', float: 'left'}}>
 				<div className='sLHeader'>
 							
@@ -117,6 +140,7 @@ export default class SearchList extends Component {
 						{cont.map((val, idx) => {
 							//var self = this
 							return <ListItem
+									key={idx}
 									onClick={this.handleClick.bind(this, idx)} 
 									value={idx+1}
 									primaryText={val.name}
@@ -132,8 +156,13 @@ export default class SearchList extends Component {
 					</ul>
 				</div>
 			</div>
-			<StatView selected={this.state.selected} />
+			{display}
 		</div>
+		} else {
+			body = <div style={{margin: "auto", marginTop: "400px"}}> <CircularProgress size={80} thickness={5} /> </div>
+		}
+		return ( 
+			<div> {body} </div>
 		)
 	}
 }

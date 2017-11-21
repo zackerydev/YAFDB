@@ -9,9 +9,11 @@ export default class StatView extends Component {
 	}
 
 	render() {
-		console.log(this.props)
+		console.log("STATS TO DISPLAY")
+		console.log(this.props.stats)
+		//console.log(this.props)
 		return (<div className='statView' style={{float: 'left', paddingLeft: "80px"}}>
-			<h1> {this.props.selected.fullName} </h1>
+			<h1> {this.props.selected[0]} </h1>
 			<hr style={{width: "100%"}} />
 				Stats will go here
 		</div>)
