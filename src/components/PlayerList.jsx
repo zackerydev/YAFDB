@@ -11,6 +11,9 @@ import {yellow500} from 'material-ui/styles/colors'
 import PropTypes from 'prop-types'
 import Subheader from 'material-ui/Subheader'
 import axios from 'axios';
+import PlayerStatView from './PlayerStatView'
+import CircularProgress  from 'material-ui/CircularProgress';
+
 let SelectableList = makeSelectable(List);
 
 function wrapState(ComposedComponent) {
@@ -57,7 +60,8 @@ export default class PlayerList extends Component {
 			selected: this.props.content[0],
 			all: this.props.content,
 			stats: [],
-			players: []
+            players: [],
+            loaded: false
 		}
 		this.getStats(0)
 	}
@@ -95,7 +99,7 @@ export default class PlayerList extends Component {
             }
         }).then(function(response) {
             console.log(response.data)
-            self.setState({selected: self.state.contents[idx], stats: response.data})
+            self.setState({selected: self.state.contents[idx], stats: response.data, loaded: true})
         })
 	}
 
@@ -105,10 +109,16 @@ export default class PlayerList extends Component {
 		
 	}
 	render() {
+        var view;
+        if(this.state.loaded) {
+            view = <PlayerStatView  stats={this.state.stats}/>
+        } else {
+            view = <div className="siteWrapper" style={{margin: "auto", marginTop: "400px"}}> <CircularProgress size={80} thickness={5} /> </div>
+        }
         var cont = this.state.contents;
 		//var self = this
 		return (<div className='horzWrapper'>
-			<div className='searchList' style={{width: '25%', minWidth: '400px', overflow: 'hidden', float: 'left'}}>
+			<div className='searchList' style={{width: '350px', overflow: 'hidden', float: 'left'}}>
 				<div className='sLHeader'>
 							
 	
@@ -143,7 +153,8 @@ export default class PlayerList extends Component {
 					</ul>
 				</div>
 			</div>
-			<StatView selected={this.state.selected} stats={this.state.stats} players={this.state.players}/>
+            {view}
+			
 		</div>
 		)
 	}

@@ -84,7 +84,7 @@ export default class Header extends Component {
 					</Tabs>
 					</div>
 		} else {
-			AppView = <div className="siteWrapper" style={{margin: "auto", marginTop: "400px"}}> <CircularProgress size={80} thickness={5} /> </div>
+			AppView = <div className="siteWrapper" style={{margin: "auto", marginTop: "400px", marginLeft: "400px"}}> <CircularProgress size={80} thickness={5} /> </div>
 		}
 
 		return(<div> {AppView} </div>);

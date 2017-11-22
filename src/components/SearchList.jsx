@@ -121,7 +121,7 @@ export default class SearchList extends Component {
 		var body;
 		if(this.state.loaded) {
 			body = <div className='horzWrapper'>
-			<div className='searchList' style={{width: '25%', minWidth: '400px', overflow: 'hidden', float: 'left'}}>
+			<div className='searchList' style={{width: '350px', overflow: 'hidden', float: 'left'}}>
 				<div className='sLHeader'>
 							
 	
