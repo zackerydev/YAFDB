@@ -63,7 +63,7 @@ router.get('/team/stats', function(req, res, next) {
 	from player_game_stats 
 	INNER JOIN (select distinct id, season_year, season_type from game) as ID_SEASON 
 ON player_game_stats.game_id = ID_SEASON.id
-INNER JOIN (select name, id from team WHERE name = 'Kansas City Chiefs') as SELECTED_TEAM
+INNER JOIN (select name, id from team WHERE name = ?) as SELECTED_TEAM
 ON SELECTED_TEAM.id = team_id
 GROUP BY season_year, FIELD(season_type, 'PRE', 'REG', 'POST'), name, team_id, season_type;`
 	var inserts = [req.query.team_name];

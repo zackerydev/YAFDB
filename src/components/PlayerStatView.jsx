@@ -44,9 +44,6 @@ export default class PlayerStatView extends Component {
 				data={this.props.stats}
                 defaultPageSize={20}
                 pageSize={20}
-                column={{
-                    minWidth: 200
-                }}
 				columns={[
 					{
 						Header: "Season Year",
