@@ -73,7 +73,7 @@ export default class SignupContent extends Component {
 					    <TextField
 					    	id="passwordconfirm"
 							hintText="Confirm Password Field"
-							floatingLabelText="Comfirm Password"
+							floatingLabelText="Confirm Password"
 							type="password"
 							onChange={this.updateState("passwordConfirm")}
 						/><br />
