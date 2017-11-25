@@ -374,7 +374,9 @@ class Playoffs extends Component {
 					value={this.state.as6}
 					> 
 					{this.state.afcw.map((val, idx) => {
-						return <MenuItem key={idx} value={val.name} primaryText={val.name} />
+						if(val.name !== this.state.as5) {
+							return <MenuItem key={idx} value={val.name} primaryText={val.name} />
+						}
 					})}
 				</SelectField>
 				
@@ -432,7 +434,9 @@ class Playoffs extends Component {
 					value={this.state.ns6}
 					> 
 					{this.state.nfcw.map((val, idx) => {
-						return <MenuItem key={idx} value={val.name} primaryText={val.name} />
+						if(val.name !== this.state.ns5) {
+							return <MenuItem key={idx} value={val.name} primaryText={val.name} />
+						}
 					})}
 				</SelectField>
 				</div>
