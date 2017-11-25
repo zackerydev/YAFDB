@@ -4,7 +4,7 @@
 var express = require('express')
 var router = express.Router()
 var mysql = require('mysql')
-
+var crypto = require('crypto')
 var config = require('../../config.json')
 var cfg = config['connection-config'];
 
@@ -19,6 +19,70 @@ router.get('/users', function(req, res, next) {
 			id: 2,
 			username: 'kosinkadink'
 		}])
+})
+
+router.get('/user/signup', function(req, res, next) {
+	var user = {
+		"username": req.query.username,
+		"password": req.query.password,
+		"first_name": req.query.fname,
+		"last_name": req.query.lname
+	}
+	console.log(user)
+	var connection = mysql.createConnection(cfg);	
+	connection.connect((err) => {
+		if(err)
+			console.log(err)
+	});
+	connection.query('INSERT INTO user_account SET ?', user, function(error, results, fields) {
+		if(error) {
+			console.log("Error occured signing up, username already taken")
+			res.send({
+				"code": 400,
+				"failed": "Username taken"
+			})
+		} else {
+			res.send({
+				"code": 200,
+				"success": "Registered successfully"
+			})
+		}
+	});
+})
+
+router.get('/user/login', function(req, res, next) {
+	var email = req.query.username;
+	var password = req.query.password;
+	var connection = mysql.createConnection(cfg);
+	connection.connect();
+	connection.query('SELECT * FROM user_account where username = ?', [email], function(error, results, fields) {
+		if(error) {
+			res.send({
+				"code": 400,
+				"failed": "Error Occurred"
+			})
+		} else {
+			if(results.length > 0) {
+				console.log(results)
+				if([0].password == password) {
+					res.send({
+						"code": 200,
+						"success": "login successful"
+					})
+				} else {
+					res.send({
+						"code": 204,
+						"failed": "Username and password do not match"
+					})
+				}
+			} else {
+				res.send({
+					"code": 204,
+					"failed": "Username does not exist"
+				})
+			}
+		}
+	})
 })
 
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
+import axios from 'axios'
 export default class SignupContent extends Component {
 	constructor(props) {
 		super(props);
@@ -13,13 +14,41 @@ export default class SignupContent extends Component {
 				fName: "",
 				lName: ""
 			},
-			dialog: this.props.dialog
+			dialog: this.props.dialog,
+			error: ""
 		}
 	}
 
 	handleSubmit = () => {
-		console.log(this.state.formData)
-		this.props.close();
+		var self = this;
+		if(self.state.formData.password !== self.state.formData.passwordConfirm) {
+			self.setState({error: "Passwords do not match!"});
+		} else {
+			axios.get('/db/user/signup', 
+			{
+				params: {
+					username: this.state.formData.username,
+					password: this.state.formData.password,
+					fname: this.state.formData.fName,
+					lname: this.state.formData.lName
+				}
+			}).then(function(response) {
+				console.log(response)
+				if(response.data.code !== 200) {
+					self.setState({error: response.data.failed})
+				} else {
+					self.props.close()
+					// axios.get('/user/info', {
+					// 	params: {
+					// 		username: self.state.formData.username
+					// 	}
+					// }).then(function(response) {
+					// 	this.props.close(response.data);
+					// })
+				}
+
+			})
+		}		
 	}
 	
 	updateState = (propName) => (event) => {
@@ -37,6 +66,12 @@ export default class SignupContent extends Component {
 	}
 
 	render() {
+		if(this.state.error != "") {
+			var err = <h3 style={{color: 'red'}}>
+			{this.state.error} </h3>
+		} else {
+			var err = <div></div>
+		}
 		const signupActions = [ 
 		<FlatButton
 	        label="Cancel"
@@ -57,6 +92,7 @@ export default class SignupContent extends Component {
 					modal={true}
 					open={this.props.dialog}
 					onRequestClose={this.closeSignUp} >
+					{err}
 						<TextField
 							id="username"
 							hintText="Username Field"
