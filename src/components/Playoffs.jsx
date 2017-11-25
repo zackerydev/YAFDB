@@ -4,8 +4,8 @@ import SelectField from 'material-ui/SelectField'
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
-import Bracket from 'react-bracket'
 import axios from 'axios'
+
 class Playoffs extends Component {
 	constructor(props) {
 		super(props)
@@ -58,6 +58,7 @@ class Playoffs extends Component {
 			superbowlwinner: ""
 		}
 	}
+
 	handleChange = (seed, event, team) => {
 		if(seed === "as1") {
 			var Div = this.state.afc[team].conference + this.state.afc[team].division;
@@ -240,6 +241,70 @@ class Playoffs extends Component {
 		var afcseed2;
 		var bracket;
 		var display;
+		var React = require('react'),
+			Bracket = require('react-bracket');
+
+		var layout = [
+		  [
+			[4, 5],
+			null,
+			[3, 6],
+			null,
+			null,
+			[15, 16],
+			null,
+			[14, 17]
+
+		  ],
+		  
+		  [
+			[7, 1],
+			[8, 2],
+			[12, 18],
+			[13, 19]
+
+		  ],
+		  
+		  [
+			[9, 10],
+			[20, 21]
+
+		  ],
+		  [
+			[11,22],	
+		  ],
+		  [[23]]
+		  
+		];
+
+	
+		var participants = [this.state.as1, this.state.as2, this.state.as3, this.state.as4, 
+							this.state.as5, this.state.as6, this.state.awinner1, this.state.awinner2, 
+							this.state.awinner3, this.state.awinner4, this.state.awinner5, 
+							this.state.ns1, this.state.ns2, this.state.ns3, this.state.ns4, 
+							this.state.ns5, this.state.ns6, this.state.nwinner1, this.state.nwinner2, 
+							this.state.nwinner3, this.state.nwinner4, this.state.nwinner5, this.state.superbowlwinner];
+		
+		var seeds = [this.state.as1, this.state.as2, this.state.as3, this.state.as4, this.state.as5, this.state.as6,
+					 this.state.ns1, this.state.ns2, this.state.ns3, this.state.ns4, this.state.ns5, this.state.ns6];
+
+		var getParticipant = function(options){
+			var team = participants[(options.info||[])[options.index] - 1];
+			var idx = (options.info||[])[options.index];
+			var num;
+			if(team == "") {
+				if(idx < 21 && idx % 11 < 7 && idx % 11 > 0) {
+					num = idx % 11 + "   ";
+				} else {
+					num = "";
+				}
+			} else {
+				num = seeds.indexOf(team) % 6  + 1 + "   ";
+			}
+			var participant = num + team;
+			return participant?<span>{participant}</span>:<span>&nbsp;</span>;
+		};
+		
 		if(false){
 		// if(this.props.user === "") {
 			display = <div id="playoffs" style={{ marginLeft: '40px', marginTop: '25px', width: "100%", whiteSpace: 'nowrap', marginLeft: '80px'}}>
@@ -378,16 +443,16 @@ class Playoffs extends Component {
 					onChange={this.handlePick.bind(this, "awinner1")}
 					value={this.state.awinner1}
 					> 
-					<MenuItem value={this.state.as3} primaryText={this.state.as3} />
-					<MenuItem value={this.state.as6} primaryText={this.state.as6} />
+					<MenuItem value={this.state.as4} primaryText={this.state.as4} />
+					<MenuItem value={this.state.as5} primaryText={this.state.as5} />
 				</SelectField>
 				<SelectField
 					floatingLabelText="AFC Game 2"
 					onChange={this.handlePick.bind(this, "awinner2")}
 					value={this.state.awinner2}
 					> 
-					<MenuItem value={this.state.as4} primaryText={this.state.as4} />
-					<MenuItem value={this.state.as5} primaryText={this.state.as5} />
+					<MenuItem value={this.state.as3} primaryText={this.state.as3} />
+					<MenuItem value={this.state.as6} primaryText={this.state.as6} />
 				</SelectField>
 				<SelectField
 					floatingLabelText="AFC Game 3"
@@ -419,16 +484,16 @@ class Playoffs extends Component {
 					onChange={this.handlePick.bind(this, "nwinner1")}
 					value={this.state.nwinner1}
 					> 
-					<MenuItem value={this.state.ns3} primaryText={this.state.ns3} />
-					<MenuItem value={this.state.ns6} primaryText={this.state.ns6} />
+					<MenuItem value={this.state.ns4} primaryText={this.state.ns4} />
+					<MenuItem value={this.state.ns5} primaryText={this.state.ns5} />
 				</SelectField>
 				<SelectField
 					floatingLabelText="NFC Game 2"
 					onChange={this.handlePick.bind(this, "nwinner2")}
 					value={this.state.nwinner2}
 					> 
-					<MenuItem value={this.state.ns4} primaryText={this.state.ns4} />
-					<MenuItem value={this.state.ns5} primaryText={this.state.ns5} />
+					<MenuItem value={this.state.ns3} primaryText={this.state.ns3} />
+					<MenuItem value={this.state.ns6} primaryText={this.state.ns6} />
 				</SelectField>
 				<SelectField
 					floatingLabelText="NFC Game 3"
@@ -463,7 +528,12 @@ class Playoffs extends Component {
 					<MenuItem value={this.state.nwinner5} primaryText={this.state.nwinner5} />
 					<MenuItem value={this.state.awinner5} primaryText={this.state.awinner5} />
 				</SelectField>
+				<hr />
 				<br />
+				<div>
+					<Bracket layout={layout} participants={participants} getParticipant={getParticipant}/>
+				</div>
+				{/*
 				<div className="Round1 AFC" style={{float: 'left', width: 'auto', padding: '10px'}}>
 				<p style={{fontWeight: 800}}> Round 1 AFC</p>
 
@@ -528,7 +598,7 @@ class Playoffs extends Component {
 					<p style={{fontWeight: 800}}> vs. </p>
 					{this.state.ns5}
 				</div>
-
+		*/}
 
 			</div>
 			</div>
