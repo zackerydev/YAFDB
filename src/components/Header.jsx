@@ -10,6 +10,7 @@ import {Tabs, Tab} from 'material-ui/Tabs'
 import Playoffs from './Playoffs.jsx'
 import axios from 'axios';
 import CircularProgress  from 'material-ui/CircularProgress';
+import BracketList from './BracketList'
 export default class Header extends Component {
 	constructor() {
 		super()
@@ -19,7 +20,8 @@ export default class Header extends Component {
 			signupFlag: false,
 			teamContent: [],
 			playerContent: [],
-			loaded: false
+			loaded: false,
+			user: ""
 		}		
 	}
 
@@ -37,11 +39,19 @@ export default class Header extends Component {
 	signupPopUp = () => {
 		this.setState({signupFlag: true})
 	}
-	closeLogin = () => {
-		this.setState({loginFlag: false})
+	closeLogin = (user) => {
+		if(typeof user !== "undefined") {
+			this.setState({user: user, loginFlag: false})
+		} else {
+			this.setState({loginFlag: false})
+		}
 	}
-	closeSignUp = () => {
-		this.setState({signupFlag: false})
+	closeSignUp = (user) => {
+		if(typeof user !== "undefined") {
+			this.setState({user: user, signupFlag: false})
+		} else {
+			this.setState({signupFlag: false})
+		}
 	}
 	render() {
 		var BarButtons;
@@ -71,15 +81,13 @@ export default class Header extends Component {
 					<SignupContent dialog={this.state.signupFlag} close={this.closeSignUp}/>	
 					<Tabs>
 						<Tab label="Teams">
-							<SearchList content={this.state.teamContent} type={"team"}/>
+							<SearchList content={this.state.teamContent} type={"team"} user={this.state.user}/>
 						</Tab>
 						<Tab label="Players" >
-							<SearchList content={this.state.teamContent} type={"player"}/>
+							<SearchList content={this.state.teamContent} type={"player"} user={this.state.user}/>
 						</Tab>
 						<Tab label="Playoffs">
-							<div>
-								<Playoffs content={this.state.teamContent}/>
-							</div>
+								<BracketList teams={this.state.teamContent} user={this.state.user} content={[{name: 'Bracket1'},{ name: 'Bracket2'}, {name: 'Bracket3'}]}/>
 						</Tab>
 					</Tabs>
 					</div>
