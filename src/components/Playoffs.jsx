@@ -196,10 +196,7 @@ class Playoffs extends Component {
 			return participant?<span>{participant}</span>:<span>&nbsp;</span>;
 	}
 	saveBracket = () => {
-		console.log("save")
-	}
-	saveBracket = () => {
-		if(this.props.user !== "") {
+		if(typeof this.props.user !== "undefined") {
 			axios.post('/db/user/savebracket', {
 			user_id: this.props.user.id,
 			name: this.state.bracketName,
@@ -208,11 +205,13 @@ class Playoffs extends Component {
 			afc_seed3: this.state.as3,
 			afc_seed4: this.state.as4,
 			afc_seed5: this.state.as5,
+			afc_seed6: this.state.as6,
 			nfc_seed1: this.state.ns1,
 			nfc_seed2: this.state.ns2,
 			nfc_seed3: this.state.ns3,
 			nfc_seed4: this.state.ns4,
 			nfc_seed5: this.state.ns5,
+			nfc_seed6: this.state.ns6,
 			afc_wc_winner1: this.state.awinner1,
 			afc_wc_winner2: this.state.awinner2,
 			afc_div_winner1: this.state.awinner3,
@@ -224,11 +223,48 @@ class Playoffs extends Component {
 			nfc_div_winner2: this.state.nwinner4,
 			nfc_champ: this.state.nwinner5,
 			sb_champ: this.state.superbowlwinner
+			}).then(function(response) {
+				console.log(response)
 			})
 		} else {
 			alert("Please login or sign up if you want to save this bracket!")
 		}
 		
+	}
+	componentWillReceiveProps(next) {
+		if(next.bracket.name !== "New") {
+			var state = this.state;
+			state.afc2 = state.afc,
+			state.afc3 = state.afc,
+			state.afc4 = state.afc,
+			state.nfc2 = state.nfc,
+			state.nfc3 = state.nfc,
+			state.nfc4 = state.nfc,
+			state.as1 = next.bracket.afc_seed1,
+			state.as2 = next.bracket.afc_seed2
+			state.as3 = next.bracket.afc_seed3
+			state.as4 = next.bracket.afc_seed4
+			state.as5 = next.bracket.afc_seed5
+			state.as6 = next.bracket.afc_seed6
+			state.ns1 = next.bracket.nfc_seed1
+			state.ns2 = next.bracket.nfc_seed2
+			state.ns3 = next.bracket.nfc_seed3
+			state.ns4 = next.bracket.nfc_seed4
+			state.ns5 = next.bracket.nfc_seed5
+			state.ns6 = next.bracket.nfc_seed6
+			state.awinner1 = next.bracket.afc_wc_winner1
+			state.awinner2 = next.bracket.afc_wc_winner2
+			state.awinner3 = next.bracket.afc_div_winner1
+			state.awinner4 = next.bracket.afc_div_winner2
+			state.awinner5 = next.bracket.afc_champ 
+			state.nwinner1 = next.bracket.nfc_wc_winner1 
+			state.nwinner2 = next.bracket.nfc_wc_winner2 
+			state.nwinner3 = next.bracket.nfc_div_winner1 
+			state.nwinner4 = next.bracket.nfc_div_winner2 
+			state.nwinner5 = next.bracket.nfc_champ 
+			state.superbowlwinner = next.bracket.sb_champ
+			this.setState(state)
+		}
 	}
 	generateBracket = () => {
 		if(this.state.as1 !== "" && this.state.as2 !== "" && this.state.as3 !== "" && this.state.as4 !== "" && this.state.as5 !== "" && this.state.as6 !== "" &&
@@ -306,12 +342,11 @@ class Playoffs extends Component {
 			return participant?<span>{participant}</span>:<span>&nbsp;</span>;
 		};
 		
-		if(false){
-		// if(this.props.user === "") {
+		if(this.props.user === "") {
 			display = <div id="playoffs" style={{ marginLeft: '40px', marginTop: '25px', width: "100%", whiteSpace: 'nowrap', marginLeft: '80px'}}>
-			<h1> Please log in to generate playoff brackets </h1> </div>
+			<h1> Please log in or sign up to generate playoff brackets </h1> </div>
 		} else {
-			display = <div id="playoffs" style={{ marginLeft: '40px', marginTop: '25px', width: "100%", whiteSpace: 'nowrap', marginLeft: '80px'}}>
+			display = <div id="playoffs" style={{ marginLeft: '400px', marginTop: '25px', width: "100%", whiteSpace: 'nowrap'}}>
 				<h1> Playoff Generator </h1>
 				<hr />
 				<TextField
@@ -321,7 +356,7 @@ class Playoffs extends Component {
 				<RaisedButton
 					label="Save"
 					secondary={true}
-					onClick={this.saveBracket}/>
+					onClick={this.saveBracket.bind(this)}/>
 				<div className="afc-seed-select">
 				<SelectField
 					floatingLabelText="AFC Seed 1"
@@ -377,6 +412,8 @@ class Playoffs extends Component {
 					{this.state.afcw.map((val, idx) => {
 						if(val.name !== this.state.as5) {
 							return <MenuItem key={idx} value={val.name} primaryText={val.name} />
+						} else  {
+							return <MenuItem key={idx} value={val.name} primaryText={val.name} disabled />
 						}
 					})}
 				</SelectField>
@@ -437,6 +474,8 @@ class Playoffs extends Component {
 					{this.state.nfcw.map((val, idx) => {
 						if(val.name !== this.state.ns5) {
 							return <MenuItem key={idx} value={val.name} primaryText={val.name} />
+						} else  {
+							return <MenuItem key={idx} value={val.name} primaryText={val.name} disabled />
 						}
 					})}
 				</SelectField>

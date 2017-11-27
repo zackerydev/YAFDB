@@ -60,7 +60,8 @@ export default class SearchList extends Component {
 			all: this.props.content,
 			stats: [],
 			players: [],
-			loaded: false
+			loaded: false,
+			user: props.user
 		}
 		this.getStats(0)
 	}
@@ -104,15 +105,56 @@ export default class SearchList extends Component {
 			})
 	}
 
+	favoriteTeam = (id, team) => {
+		var self = this;
+		this.props.favorite(id, team)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if(typeof nextProps.user !== "undefined") {
+			this.getStats(0)
+			this.setState({user: nextProps.user})
+		}
+		
+	}
+	pfav = (id, player) => {
+		var self = this;
+		axios.get('/db/user/favorite/player', 
+		{
+			params: {
+			user_id: this.state.user.id,
+			player_id: id
+			}
+		}).then(function(response) {
+			var user = self.state.user;
+			var pname = player.first_name + " " + player.last_name
+			user.players.push({Favorite_Player: player.first_name + " " + player.last_name});
+			self.setState({user: user})
+			alert("Player Favorited!")
+		});
+}
 	handleClick(idx) {
 		var self = this;
 		this.getStats(idx);
 		
 	}
 	render() {
-		var cont = this.state.contents;
+		var pcont = this.state.players;
+		if(typeof this.state.user.players !== "undefined") {
+			for(var i = 0; i < this.state.user.players.length; i++) {
+				for(var j = 0; j < pcont.length; j++) {
+					if(this.state.user.players[i].Favorite_Player === pcont[j].first_name + " " + pcont[j].last_name) {
+						var removed = pcont.splice(j, 1);
+						removed[0].fav = true;
+						pcont.unshift(removed[0]);
+					} else {
+						pcont[j].fav = false;
+					}
+				}
+			}
+		}
 		if(this.props.type === "player" && this.state.players !== []) {
-			var display =	<PlayerList selected={this.state.selected} content={this.state.players}/>				
+			var display =	<PlayerList selected={this.state.selected} content={pcont} favorite={this.pfav}/>				
 		} else {
 			var display = <StatView selected={this.state.selected} stats={this.state.stats} players={this.state.players}/>
 
@@ -137,7 +179,7 @@ export default class SearchList extends Component {
 					<ul style={{overflowY: 'auto', height: '75vh', paddingLeft: '0', marginTop: '0'}}>
 						<SelectableList defaultValue={1}>
 
-						{cont.map((val, idx) => {
+						{this.state.contents.map((val, idx) => {
 							//var self = this
 							return <ListItem
 									key={idx}
@@ -145,7 +187,7 @@ export default class SearchList extends Component {
 									value={idx+1}
 									primaryText={val.name}
 									secondaryText={val.code} 
-									rightIcon={<Checkbox 
+									rightIcon={<Checkbox onCheck={this.favoriteTeam.bind(this, val.id, val)} checked={val.fav}
 										checkedIcon={<FavIcon color={yellow500}/>}
 										uncheckedIcon={<FavBorder color={yellow500}/>}
 									/>}

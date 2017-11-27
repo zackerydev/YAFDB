@@ -39,13 +39,30 @@ export default class Header extends Component {
 	signupPopUp = () => {
 		this.setState({signupFlag: true})
 	}
+	favorite = (id, team) => {
+		var self = this;
+		axios.get('/db/user/favorite/team', 
+		{
+			params: {
+			user_id: this.state.user.id,
+			team_id: id
+			}
+		}).then(function(response) {
+			var user = self.state.user;
+			user.teams.push({Favorite_Team: team.name});
+			self.setState({user: user})
+			alert("Team Favorited!")
+		});
+	}
 	closeLogin = (user) => {
 		if(typeof user !== "undefined") {
-			this.setState({user: user, loginFlag: false, logged: true})
+			this.setState({user: user, loginFlag: false, logged: true});
 		} else {
 			this.setState({loginFlag: false})
 		}
 	}
+
+	
 	closeSignUp = (user) => {
 		if(typeof user !== "undefined") {
 			this.setState({user: user, signupFlag: false})
@@ -54,6 +71,30 @@ export default class Header extends Component {
 		}
 	}
 	render() {
+		if(typeof this.state.user !== "undefined") {
+			
+			var cont = this.state.teamContent;
+			var pcont = this.state.playerContent;
+			if(typeof this.state.user.teams !== "undefined") {
+				for(var i = 0; i < this.state.user.teams.length; i++) {
+					for(var j = 0; j < cont.length; j++) {
+						if(this.state.user.teams[i].Favorite_Team === cont[j].name) {
+							var removed = cont.splice(j, 1);
+							removed[0].fav = true;
+							cont.unshift(removed[0]);
+						} else {
+							cont[j].fav = false;
+						}
+					}
+				}
+			} 
+		}
+		if(typeof this.state.user.brackets !== "undefined") {
+			var brackets = this.state.user.brackets;
+			brackets.push({name: "New"})
+		} else {
+			var brackets = [{name: "New"}]
+		} 
 		var BarButtons;
 		if(this.state.logged) {
 			BarButtons = <div style={{display: "inline-block"}}>
@@ -81,13 +122,13 @@ export default class Header extends Component {
 					<SignupContent dialog={this.state.signupFlag} close={this.closeSignUp}/>	
 					<Tabs>
 						<Tab label="Teams">
-							<SearchList content={this.state.teamContent} type={"team"} user={this.state.user}/>
+							<SearchList content={cont} type={"team"} favorite={this.favorite} user={this.state.user}/>
 						</Tab>
 						<Tab label="Players" >
-							<SearchList content={this.state.teamContent} type={"player"} user={this.state.user}/>
+							<SearchList content={cont} type={"player"} favorite={this.favorite} user={this.state.user}/>
 						</Tab>
 						<Tab label="Playoffs">
-								<BracketList teams={this.state.teamContent} user={this.state.user} content={[{name: 'Bracket1'},{ name: 'Bracket2'}, {name: 'Bracket3'}]}/>
+								<BracketList teams={this.state.teamContent} user={this.state.user} favorite={this.favorite} content={brackets}/>
 						</Tab>
 					</Tabs>
 					</div>

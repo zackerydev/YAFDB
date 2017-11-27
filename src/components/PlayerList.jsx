@@ -67,7 +67,10 @@ export default class PlayerList extends Component {
 	}
 
     componentWillReceiveProps(nextProps) {
-        this.setState({contents: nextProps.content, selected: nextProps.content[0], all: nextProps.content} )
+			var self = this;
+        this.setState({contents: nextProps.content, selected: nextProps.selected, all: nextProps.content}, () => {
+					self.getStats(0)
+				})
     }
 
 	filterContent(e) {
@@ -108,7 +111,12 @@ export default class PlayerList extends Component {
 		this.getStats(idx, "team");
 		
 	}
+
+	favorite = (id, player) => {
+		this.props.favorite(id, player)
+	}
 	render() {
+		console.log(this)
         var view;
         if(this.state.loaded) {
             view = <PlayerStatView  stats={this.state.stats}/>
@@ -142,7 +150,7 @@ export default class PlayerList extends Component {
 									value={idx+1}
 									primaryText={val.first_name + " " + val.last_name}
 									secondaryText={val.Team_name + " | " + val.position} 
-									rightIcon={<Checkbox 
+									rightIcon={<Checkbox checked={val.fav} onCheck={this.favorite.bind(this, val.id, val)}
 										checkedIcon={<FavIcon color={yellow500}/>}
 										uncheckedIcon={<FavBorder color={yellow500}/>}
 									/>}

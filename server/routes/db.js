@@ -33,6 +33,18 @@ router.get('/user/favorite/teams', function(req, res, next) {
 		if(error) console.log(error)
 		res.json(results);
 	})
+	connection.end()
+})
+
+router.get('/user/favorite/team', function(req, res, next) {
+	var connection = mysql.createConnection(cfg);
+	var SQL_QUERY = `INSERT INTO user_favorite_team SET ?`
+	connection.connect();
+	connection.query(SQL_QUERY, req.query, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+	connection.end()
 })
 
 router.get('/user/favorite/players', function(req, res, next) {
@@ -44,6 +56,7 @@ router.get('/user/favorite/players', function(req, res, next) {
 		if(error) console.log(error)
 		res.json(results);
 	})
+	connection.end()
 })
 
 router.get('/user/brackets', function(req, res, next) {
@@ -54,10 +67,18 @@ router.get('/user/brackets', function(req, res, next) {
 		if(error) console.log(error)
 		res.json(results);
 	})
+	connection.end()
 })
 
-router.get('/user/savebracket', function(req, res, next) {
-
+router.post('/user/savebracket', function(req, res, next) {
+	var connection = mysql.createConnection(cfg);
+	var SQL_QUERY = `INSERT INTO user_playoff_bracket SET ?`
+	connection.connect();
+	connection.query(SQL_QUERY, req.body, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+	connection.end()
 })
 router.get('/user/signup', function(req, res, next) {
 	var user = {
@@ -86,6 +107,7 @@ router.get('/user/signup', function(req, res, next) {
 			})
 		}
 	});
+	connection.end()
 })
 
 router.get('/user/login', function(req, res, next) {
@@ -126,6 +148,7 @@ router.get('/user/login', function(req, res, next) {
 			}
 		}
 	})
+	connection.end()
 })
 
 
@@ -139,6 +162,7 @@ router.get('/teams', function(req, res, next) {
 		if(error) console.log(error)
 		res.json(results);
 	})
+	connection.end()
 
 })
 router.get('/players', function(req, res, next) {
@@ -153,6 +177,7 @@ router.get('/players', function(req, res, next) {
 		if(error) console.log(error)
 		res.json(results);
 	})
+	connection.end()
 
 })
 
@@ -180,6 +205,7 @@ GROUP BY season_year, FIELD(season_type, 'PRE', 'REG', 'POST'), name, team_id, s
 		if(error) console.log(error)
 		res.json(results);
 	})
+	connection.end()
 
 })
 
@@ -187,6 +213,7 @@ router.get('/player/stats', function(req, res, next) {
 	//res.send('respond with a resource')
 	//We will use res.json(DATA_FROM_DB) to send data back
 	var connection = mysql.createConnection(cfg);
+	console.log(req.query)
 	var SQL = ` SELECT first_name, last_name, team_id, season_year, sum(passing_yards), sum(passing_attempts), sum(passing_completions)
 				, sum(rushing_yards), sum(rushing_attempts), sum(rushing_touchdowns), sum(receiving_yards)
 				, sum(receiving_catches), sum(receiving_targets), sum(receiving_touchdowns), sum(tackles)
@@ -209,6 +236,7 @@ router.get('/player/stats', function(req, res, next) {
 		if(error) console.log(error)
 		res.json(results);
 	})
+	connection.end()
 
 })
 
@@ -227,6 +255,7 @@ router.get('/team/players', function(req, res, next) {
 		if(error) console.log(error);
 		res.json(results);
 	})
+	connection.end()
 
 })
 
@@ -240,6 +269,7 @@ router.post('/inputexample', function(req, res, next) {
 	connection.query(SQL_QUery, (error, results, fields) => {
 		res.json(results)
 	})
+	connection.end()
 })
 
 module.exports = router
