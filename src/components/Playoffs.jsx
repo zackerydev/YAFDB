@@ -201,7 +201,7 @@ class Playoffs extends Component {
 	saveBracket = () => {
 		if(this.props.user !== "") {
 			axios.post('/db/user/savebracket', {
-			user_id: this.props.user.username,
+			user_id: this.props.user.id,
 			name: this.state.bracketName,
 			afc_seed1: this.state.as1,
 			afc_seed2: this.state.as2,
@@ -224,8 +224,9 @@ class Playoffs extends Component {
 			nfc_div_winner2: this.state.nwinner4,
 			nfc_champ: this.state.nwinner5,
 			sb_champ: this.state.superbowlwinner
-
-		})
+			})
+		} else {
+			alert("Please login or sign up if you want to save this bracket!")
 		}
 		
 	}

@@ -30,13 +30,37 @@ export default class LoginContent extends Component {
 				if(response.data.code !== 200) {
 					self.setState({error: response.data.failed})
 				} else {
-					axios.get('/user/info', {
+					var user = {
+						id: response.data.id,
+						lname: response.data.last_name,
+						fname: response.data.first_name,
+						username: response.data.username
+					}
+					axios.get('/db/user/favorite/teams', {
 						params: {
-							username: self.state.formData.username
+							username: user.id
 						}
 					}).then(function(response) {
-						self.props.close(response.data);
+						user.teams = response.data
+
+						axios.get('/db/user/favorite/players', {
+							params: {
+								username: user.id
+							}
+						}).then(function(response) {
+							user.players = response.data
+							axios.get('/db/user/brackets', {
+								params: {
+									username: user.id
+								}
+							}).then(function(response) {
+								user.brackets = response.data
+								self.props.close(user);
+							})
+						})
 					})
+						
+					
 				}
 
 		})

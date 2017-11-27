@@ -20,7 +20,45 @@ router.get('/users', function(req, res, next) {
 			username: 'kosinkadink'
 		}])
 })
+router.get('/user/info', function(req, res, next) {
+	res.json({test: "test"})
 
+})
+router.get('/user/favorite/teams', function(req, res, next) {
+	var connection = mysql.createConnection(cfg);
+	var SQL_QUERY = `SELECT t.name as Favorite_Team from user_favorite_team as ft
+	INNER JOIN team as t on ft.team_id = t.id where ft.user_id = ?`
+	connection.connect();
+	connection.query(SQL_QUERY, req.query.username, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+})
+
+router.get('/user/favorite/players', function(req, res, next) {
+	var connection = mysql.createConnection(cfg);
+	var SQL_QUERY = `select CONCAT(pl.first_name, ' ', pl.last_name) as Favorite_Player from user_favorite_player as fp 
+	inner join player as pl on fp.player_id = pl.id where user_id = ?`
+	connection.connect();
+	connection.query(SQL_QUERY, req.query.username, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+})
+
+router.get('/user/brackets', function(req, res, next) {
+	var connection = mysql.createConnection(cfg);
+	var SQL_QUERY = `select * from user_playoff_bracket where user_id = ?`
+	connection.connect();
+	connection.query(SQL_QUERY, req.query.username, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+})
+
+router.get('/user/savebracket', function(req, res, next) {
+
+})
 router.get('/user/signup', function(req, res, next) {
 	var user = {
 		"username": req.query.username,
@@ -64,10 +102,15 @@ router.get('/user/login', function(req, res, next) {
 		} else {
 			if(results.length > 0) {
 				console.log(results)
-				if([0].password == password) {
+				if(results[0].password == password) {
+					console.log("success")
 					res.send({
 						"code": 200,
-						"success": "login successful"
+						"success": "login successful",
+						username: results[0].username,
+						first_name: results[0].first_name,
+						last_name: results[0].last_name,
+						id: results[0].id
 					})
 				} else {
 					res.send({
@@ -90,7 +133,7 @@ router.get('/teams', function(req, res, next) {
 	//res.send('respond with a resource')
 	//We will use res.json(DATA_FROM_DB) to send data back
 	var connection = mysql.createConnection(cfg);
-	var SQL_QUERY = 'SELECT name, city, state, code, division, conference from team;'
+	var SQL_QUERY = 'SELECT id, name, city, state, code, division, conference from team;'
 	connection.connect();
 	connection.query(SQL_QUERY, (error, results, fields) => {
 		if(error) console.log(error)
@@ -102,7 +145,7 @@ router.get('/players', function(req, res, next) {
 	//res.send('respond with a resource')
 	//We will use res.json(DATA_FROM_DB) to send data back
 	var connection = mysql.createConnection(cfg);
-	var SQL_QUERY = `SELECT first_name, last_name, position, number, name as Team_name from team
+	var SQL_QUERY = `SELECT id, first_name, last_name, position, number, name as Team_name from team
 	INNER JOIN player ON team.id = player.team_ID
 	ORDER BY Team_name, first_name;`
 	connection.connect();

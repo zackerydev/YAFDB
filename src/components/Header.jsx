@@ -41,7 +41,7 @@ export default class Header extends Component {
 	}
 	closeLogin = (user) => {
 		if(typeof user !== "undefined") {
-			this.setState({user: user, loginFlag: false})
+			this.setState({user: user, loginFlag: false, logged: true})
 		} else {
 			this.setState({loginFlag: false})
 		}
