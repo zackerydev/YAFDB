@@ -11,6 +11,8 @@ The only program *needed* for this project is Node.js which you can find here: h
   5. Now that the packages are all installed run the command `npm run dev-api` this starts a local development Express.js "Server" on your machine that mimics the way the actual server handles API requests so we can run the website locally. It will also automatically reload when server files change
   6. Open a new tab in Cmder (or a new command prompt window) and run `npm start` in the same directory. This starts up the actual react app and loads the front end. It should automatically open a window for you and reload on changes.
   7. To stop, all you need to do is press CTRL+C and type `y` to the prompt. 
+
+NOTE: You will need to set up a config file called config.json
 After the first ime run steps 5 - 7 to startup the app to view your changes.
 
 ## Project Structure

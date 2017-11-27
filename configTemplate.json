@@ -1,0 +1,18 @@
+
+{
+
+	"connection-config": {
+
+		"host": "connection host",
+
+		"user": "local user",
+
+		"password": "local user password",
+
+		"database": "database word"
+
+	}
+
+
+
+}
