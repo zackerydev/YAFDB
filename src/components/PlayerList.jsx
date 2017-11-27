@@ -82,7 +82,7 @@ export default class PlayerList extends Component {
 			var NFLTeams = this.state.contents;
 			for(var i = 0; i < NFLTeams.length; i++) {
 				for(var key in NFLTeams[i]) {
-					if(NFLTeams[i][key].toLowerCase().indexOf(newQuery.toLowerCase()) !== -1){
+					if(NFLTeams[i][key].toString().toLowerCase().indexOf(newQuery.toLowerCase()) !== -1){
 						newContents.push(NFLTeams[i])
 						break
 					}
