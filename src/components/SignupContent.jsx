@@ -37,7 +37,7 @@ export default class SignupContent extends Component {
 				if(response.data.code !== 200) {
 					self.setState({error: response.data.failed})
 				} else {
-					self.props.close()
+					self.props.close(self.state.formData)
 					// axios.get('/user/info', {
 					// 	params: {
 					// 		username: self.state.formData.username

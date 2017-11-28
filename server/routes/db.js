@@ -81,9 +81,13 @@ router.post('/user/savebracket', function(req, res, next) {
 	connection.end()
 })
 router.get('/user/signup', function(req, res, next) {
+	var key = "7fzCnuyGGFEKTzl6CZ5E";
+	var hash = crypto.createHmac('sha512', key)
+	hash.update(req.query.password)
+	var value = hash.digest('hex')
 	var user = {
 		"username": req.query.username,
-		"password": req.query.password,
+		"password": value,
 		"first_name": req.query.fname,
 		"last_name": req.query.lname
 	}
@@ -95,6 +99,7 @@ router.get('/user/signup', function(req, res, next) {
 	});
 	connection.query('INSERT INTO user_account SET ?', user, function(error, results, fields) {
 		if(error) {
+			console.log(error)
 			console.log("Error occured signing up, username already taken")
 			res.send({
 				"code": 400,
@@ -124,7 +129,11 @@ router.get('/user/login', function(req, res, next) {
 		} else {
 			if(results.length > 0) {
 				console.log(results)
-				if(results[0].password == password) {
+				var key = "7fzCnuyGGFEKTzl6CZ5E";
+				var hash = crypto.createHmac('sha512', key)
+				hash.update(req.query.password)
+				var value1 = hash.digest('hex')
+				if(results[0].password == value1) {
 					console.log("success")
 					res.send({
 						"code": 200,
