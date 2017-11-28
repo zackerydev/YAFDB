@@ -64,7 +64,9 @@ export default class Header extends Component {
 
 	
 	closeSignUp = (user) => {
-		if(typeof user !== "undefined") {
+		if(typeof user.username !== "undefined") {
+			user.teams = []
+			user.players = []
 			this.setState({user: user, signupFlag: false, logged: true})
 		} else {
 			this.setState({signupFlag: false})
