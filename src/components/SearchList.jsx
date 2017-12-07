@@ -114,19 +114,23 @@ export default class SearchList extends Component {
 							}).then(function(response) {
 								var away = response.data;
 								for(var i = 0; i < teamStats.length; i++) {
-									if(typeof home[i] === "undefined") {
-										home[i] = {
-											home_wins: 0,
-											home_losses: 0
+									var type = teamStats[i].season_type;
+									var year = teamStats[i].season_year;
+									var wins = 0;
+									var losses = 0;
+									for(var j = 0; j < home.length; j++) {
+										if(home[j].season_type === type && home[j].season_year === year) {
+											wins += home[j].home_wins
+											losses += home[j].home_losses
 										}
 									}
-									if(typeof away[i] === "undefined") {
-										away[i] = {
-											away_wins: 0,
-											away_losses: 0
+									for(var j = 0; j < away.length; j++) {
+										if(away[j].season_type === type && away[j].season_year === year) {
+											wins += away[j].away_wins
+											losses += away[j].away_losses
 										}
 									}
-									teamStats[i].record = (home[i].home_wins + away[i].away_wins) + " - " + (home[i].home_losses + away[i].away_losses)						
+									teamStats[i].record = wins + " - " + losses					
 								}
 								self.setState({loaded: true, selected: self.state.contents[idx], players: teamPlayers, stats: teamStats})
 								

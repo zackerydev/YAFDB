@@ -217,6 +217,7 @@ router.get('/team/home', function(req, res, next) {
 		GROUP BY season_year, FIELD(season_type, 'PRE', 'REG', 'POST'), name, T.id, season_type;`
 	var inserts = [req.query.team_name];
 	SQL = mysql.format(SQL, inserts);
+	console.log(SQL);
 	connection.connect();
 	connection.query(SQL, (error, results, fields) => {
 		if(error) console.log(error)
