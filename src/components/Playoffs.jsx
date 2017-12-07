@@ -196,6 +196,7 @@ class Playoffs extends Component {
 			return participant?<span>{participant}</span>:<span>&nbsp;</span>;
 	}
 	saveBracket = () => {
+		var self = this;
 		if(typeof this.props.user !== "undefined") {
 			axios.post('/db/user/savebracket', {
 			user_id: this.props.user.id,
@@ -224,7 +225,34 @@ class Playoffs extends Component {
 			nfc_champ: this.state.nwinner5,
 			sb_champ: this.state.superbowlwinner
 			}).then(function(response) {
-				console.log("Submitted bracket")
+				alert("Saved bracket!")
+				self.props.new({
+					user_id: self.props.user.id,
+					name: self.state.bracketName,
+					afc_seed1: self.state.as1,
+					afc_seed2: self.state.as2,
+					afc_seed3: self.state.as3,
+					afc_seed4: self.state.as4,
+					afc_seed5: self.state.as5,
+					afc_seed6: self.state.as6,
+					nfc_seed1: self.state.ns1,
+					nfc_seed2: self.state.ns2,
+					nfc_seed3: self.state.ns3,
+					nfc_seed4: self.state.ns4,
+					nfc_seed5: self.state.ns5,
+					nfc_seed6: self.state.ns6,
+					afc_wc_winner1: self.state.awinner1,
+					afc_wc_winner2: self.state.awinner2,
+					afc_div_winner1: self.state.awinner3,
+					afc_div_winner2: self.state.awinner4,
+					afc_champ: self.state.awinner5,
+					nfc_wc_winner1: self.state.nwinner1,
+					nfc_wc_winner2: self.state.nwinner2,
+					nfc_div_winner1: self.state.nwinner3,
+					nfc_div_winner2: self.state.nwinner4,
+					nfc_champ: self.state.nwinner5,
+					sb_champ: self.state.superbowlwinner
+					});
 			})
 		} else {
 			alert("Please login or sign up if you want to save this bracket!")
@@ -345,7 +373,7 @@ class Playoffs extends Component {
 			display = <div id="playoffs" style={{ marginLeft: '40px', marginTop: '25px', width: "100%", whiteSpace: 'nowrap', marginLeft: '80px'}}>
 			<h1> Please log in or sign up to generate playoff brackets </h1> </div>
 		} else {
-			display = <div id="playoffs" style={{ marginLeft: '400px', marginTop: '25px', width: "100%", whiteSpace: 'nowrap'}}>
+			display = <div id="playoffs" style={{ marginLeft: '400px', marginTop: '25px',  whiteSpace: 'nowrap'}}>
 				<h1> Playoff Generator </h1>
 				<hr />
 				<TextField

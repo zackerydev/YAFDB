@@ -39,6 +39,9 @@ export default class Header extends Component {
 	signupPopUp = () => {
 		this.setState({signupFlag: true})
 	}
+	signOut = () => {
+		this.setState({user: "", logged: false})
+	}
 	favorite = (id, team) => {
 		var self = this;
 		axios.get('/db/user/favorite/team', 
@@ -100,6 +103,10 @@ export default class Header extends Component {
 		var BarButtons;
 		if(this.state.logged) {
 			BarButtons = <div style={{display: "inline-block"}}>
+			<RaisedButton 
+									label="Sign Out"
+									secondary={true}
+									onClick={this.signOut}/>
 			</div>
 		} else {
 			BarButtons = <div style={{display: "inline-block"}}>

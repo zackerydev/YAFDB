@@ -69,6 +69,12 @@ export default class BracketList extends Component {
         this.setState({contents: nextProps.content, selected: nextProps.content[0], all: nextProps.content} )
     }
 
+	newBracket = (brack) => {
+		var newCont = this.state.all;
+		newCont.push(brack)
+		this.setState({contents: newCont, all: newCont});
+
+	}
 	filterContent(e) {
 		var newQuery = e.target.value
 		var newContents = []
@@ -129,7 +135,7 @@ export default class BracketList extends Component {
 					</ul>
 				</div>
 			</div>
-            <Playoffs user={this.props.user} bracket={this.state.selected} teams={this.props.teams}/>
+            <Playoffs new={this.newBracket} user={this.props.user} bracket={this.state.selected} teams={this.props.teams}/>
 			
 		</div>
 		)
