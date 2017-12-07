@@ -101,7 +101,6 @@ export default class PlayerList extends Component {
             last_name: this.state.contents[idx].last_name
             }
         }).then(function(response) {
-            console.log(response.data)
             self.setState({selected: self.state.contents[idx], stats: response.data, loaded: true})
         })
 	}
@@ -116,7 +115,6 @@ export default class PlayerList extends Component {
 		this.props.favorite(id, player)
 	}
 	render() {
-		console.log(this)
         var view;
         if(this.state.loaded) {
             view = <PlayerStatView  stats={this.state.stats}/>

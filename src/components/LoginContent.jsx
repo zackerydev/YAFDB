@@ -18,7 +18,6 @@ export default class LoginContent extends Component {
 
 	handleSubmit = () => {
 		var self = this;
-		console.log(this.state.formData)
 		axios.get('/db/user/login', 
 			{
 				params: {
@@ -26,7 +25,6 @@ export default class LoginContent extends Component {
 					password: this.state.formData.password
 				}
 			}).then(function(response) {
-				console.log(response)
 				if(response.data.code !== 200) {
 					self.setState({error: response.data.failed})
 				} else {

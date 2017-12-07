@@ -38,7 +38,20 @@ router.get('/user/favorite/teams', function(req, res, next) {
 
 router.get('/user/favorite/team', function(req, res, next) {
 	var connection = mysql.createConnection(cfg);
+	console.log(req.query)
 	var SQL_QUERY = `INSERT INTO user_favorite_team SET ?`
+	connection.connect();
+	connection.query(SQL_QUERY, req.query, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+	connection.end()
+})
+
+router.get('/user/favorite/player', function(req, res, next) {
+	var connection = mysql.createConnection(cfg);
+	console.log(req.query);
+	var SQL_QUERY = `INSERT INTO user_favorite_player SET ?`
 	connection.connect();
 	connection.query(SQL_QUERY, req.query, (error, results, fields) => {
 		if(error) console.log(error)
@@ -161,6 +174,8 @@ router.get('/user/login', function(req, res, next) {
 })
 
 
+
+
 router.get('/teams', function(req, res, next) {
 	//res.send('respond with a resource')
 	//We will use res.json(DATA_FROM_DB) to send data back
@@ -188,6 +203,45 @@ router.get('/players', function(req, res, next) {
 	})
 	connection.end()
 
+})
+
+router.get('/team/home', function(req, res, next) {
+	//res.send('respond with a resource')
+	//We will use res.json(DATA_FROM_DB) to send data back
+	var connection = mysql.createConnection(cfg);
+	var SQL = `SELECT name, T.id, season_year, season_type, SUM(home_score>away_score) home_wins, 
+	SUM(home_score=away_score) home_ties, SUM(home_score<away_score) home_losses 
+	FROM game 
+	INNER JOIN (SELECT name, id FROM team WHERE name = ?) AS T
+		ON home_team = T.id
+		GROUP BY season_year, FIELD(season_type, 'PRE', 'REG', 'POST'), name, T.id, season_type;`
+	var inserts = [req.query.team_name];
+	SQL = mysql.format(SQL, inserts);
+	connection.connect();
+	connection.query(SQL, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+	connection.end()
+})
+
+router.get('/team/away', function(req, res, next) {
+	//res.send('respond with a resource')
+	//We will use res.json(DATA_FROM_DB) to send data back
+	var connection = mysql.createConnection(cfg);
+	var SQL = `SELECT name, T.id, season_year, season_type, SUM(away_score>home_score) away_wins, SUM(away_score=home_score) away_ties, SUM(away_score<home_score) away_losses 
+	FROM game 
+	INNER JOIN (SELECT name, id FROM team WHERE name = ?) AS T
+		ON away_team = T.id
+		GROUP BY season_year, FIELD(season_type, 'PRE', 'REG', 'POST'), name, T.id, season_type;`
+	var inserts = [req.query.team_name];
+	SQL = mysql.format(SQL, inserts);
+	connection.connect();
+	connection.query(SQL, (error, results, fields) => {
+		if(error) console.log(error)
+		res.json(results);
+	})
+	connection.end()
 })
 
 router.get('/team/stats', function(req, res, next) {
@@ -253,7 +307,7 @@ router.get('/team/players', function(req, res, next) {
 	//res.send('respond with a resource')
 	//We will use res.json(DATA_FROM_DB) to send data back
 	var connection = mysql.createConnection(cfg);
-	var SQL = `SELECT first_name, last_name, position, number, name as Team_name from team
+	var SQL = `SELECT first_name, last_name, player.id, position, number, name as Team_name from team
 	INNER JOIN player ON team.id = player.team_ID
 	where team.name = ?
 	ORDER BY first_name;`

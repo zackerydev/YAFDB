@@ -224,7 +224,7 @@ class Playoffs extends Component {
 			nfc_champ: this.state.nwinner5,
 			sb_champ: this.state.superbowlwinner
 			}).then(function(response) {
-				console.log(response)
+				console.log("Submitted bracket")
 			})
 		} else {
 			alert("Please login or sign up if you want to save this bracket!")
@@ -274,7 +274,6 @@ class Playoffs extends Component {
 			}
 	}
 	render() {		
-		console.log(this.props)
 		var afcseed2;
 		var bracket;
 		var display;

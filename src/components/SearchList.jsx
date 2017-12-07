@@ -100,7 +100,39 @@ export default class SearchList extends Component {
 						team_name: self.state.contents[idx].name
 						}
 					}).then(function(response) {
-						self.setState({loaded: true, selected: self.state.contents[idx], players: response.data, stats: teamStats})
+						var teamPlayers = response.data
+						axios.get('/db/team/home', {
+							params: {
+								team_name: self.state.contents[idx].name
+							}
+						}).then(function(response) {
+							var home = response.data
+							axios.get('/db/team/away', {
+								params: {
+									team_name: self.state.contents[idx].name
+								}
+							}).then(function(response) {
+								var away = response.data;
+								for(var i = 0; i < teamStats.length; i++) {
+									if(typeof home[i] === "undefined") {
+										home[i] = {
+											home_wins: 0,
+											home_losses: 0
+										}
+									}
+									if(typeof away[i] === "undefined") {
+										away[i] = {
+											away_wins: 0,
+											away_losses: 0
+										}
+									}
+									teamStats[i].record = (home[i].home_wins + away[i].away_wins) + " - " + (home[i].home_losses + away[i].away_losses)						
+								}
+								self.setState({loaded: true, selected: self.state.contents[idx], players: teamPlayers, stats: teamStats})
+								
+							})
+						})
+				
 					})
 			})
 	}
@@ -122,8 +154,8 @@ export default class SearchList extends Component {
 		axios.get('/db/user/favorite/player', 
 		{
 			params: {
-			user_id: this.state.user.id,
-			player_id: id
+				user_id: self.state.user.id,
+				player_id: id
 			}
 		}).then(function(response) {
 			var user = self.state.user;

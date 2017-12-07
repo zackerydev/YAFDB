@@ -33,18 +33,28 @@ export default class SignupContent extends Component {
 					lname: this.state.formData.lName
 				}
 			}).then(function(response) {
-				console.log(response)
 				if(response.data.code !== 200) {
 					self.setState({error: response.data.failed})
 				} else {
-					self.props.close(self.state.formData)
-					// axios.get('/user/info', {
-					// 	params: {
-					// 		username: self.state.formData.username
-					// 	}
-					// }).then(function(response) {
-					// 	this.props.close(response.data);
-					// })
+					axios.get('/db/user/login', 
+					{
+						params: {
+							username: self.state.formData.username,
+							password: self.state.formData.password
+						}
+					}).then(function(response) {
+						if(response.data.code !== 200) {
+							self.setState({error: response.data.failed})
+						} else {
+							var user = {
+								id: response.data.id,
+								lname: response.data.last_name,
+								fname: response.data.first_name,
+								username: response.data.username
+							}
+							self.props.close(user)
+						}
+					});
 				}
 
 			})

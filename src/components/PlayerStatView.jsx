@@ -25,8 +25,6 @@ export default class PlayerStatView extends Component {
 		this.setState({selectedYear: value});
 	}
 	render() {
-		console.log("STATS TO DISPLAY")
-		console.log(this.props.stats)
 		//console.log(this.props)
 		return (<div className='statView' style={{width: '90%', paddingLeft: "750px", whiteSpace: "nowrap"}}>
 			<h1> {this.props.stats[0].first_name + " " + this.props.stats[0].last_name} </h1>
@@ -39,7 +37,7 @@ export default class PlayerStatView extends Component {
 					}) }
         	</SelectField> */}
 			<hr style={{width: "100%"}} />
-			<div>
+			<div style={{width: "1000px"}}>
 			<ReactTable
 				data={this.props.stats}
                 defaultPageSize={20}

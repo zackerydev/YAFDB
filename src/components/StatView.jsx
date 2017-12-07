@@ -25,8 +25,6 @@ export default class StatView extends Component {
 		this.setState({selectedYear: value});
 	}
 	render() {
-		console.log("STATS TO DISPLAY")
-		console.log(this.props.stats)
 		//console.log(this.props)
 		return (<div className='statView' style={{width: '100%', paddingLeft: "450px"}}>
 			<h1> {this.props.stats[0].name} </h1>
@@ -39,7 +37,7 @@ export default class StatView extends Component {
 					}) }
         	</SelectField> */}
 			<hr style={{width: "100%"}} />
-			<div>
+			<div style={{width: "1200px"}}>
 			<ReactTable
 				data={this.props.stats}
 				defaultPageSize={20}
@@ -51,6 +49,22 @@ export default class StatView extends Component {
 					}, {
 						Header: "Season Type",
 						accessor: "season_type"
+					},{
+						Header: "Record",
+						accessor: "record"
+						
+					},{
+						Header: "Passing Yards",
+						accessor: "sum(passing_yards)"
+					},{
+						Header: "Receiving Touchdowns",
+						accessor: "sum(receiving_touchdowns)"
+					},{
+						Header: "Receiving Yards",
+						accessor: "sum(receiving_yards)"
+					},{
+						Header: "Rushing Touchdowns",
+						accessor: "sum(rushing_touchdowns)"
 					},{
 						Header: "Sacks",
 						accessor: "sum(defense_sacks)"
@@ -97,9 +111,6 @@ export default class StatView extends Component {
 						Header: "Passing Completions",
 						accessor: "sum(passing_completions)"
 					},{
-						Header: "Passing Yards",
-						accessor: "sum(passing_yards)"
-					},{
 						Header: "Punt Return Yards",
 						accessor: "sum(punt_return_yds)"
 					},{
@@ -115,17 +126,8 @@ export default class StatView extends Component {
 						Header: "Receiving Targets",
 						accessor: "sum(receiving_targets)"
 					},{
-						Header: "Receiving Touchdowns",
-						accessor: "sum(receiving_touchdowns)"
-					},{
-						Header: "Receiving Yards",
-						accessor: "sum(receiving_yards)"
-					},{
 						Header: "Rushing Attempts",
 						accessor: "sum(rushing_attempts)"
-					},{
-						Header: "Rushing Touchdowns",
-						accessor: "sum(rushing_touchdowns)"
 					},{
 						Header: "Rushing Yards",
 						accessor: "sum(rushing_yards)"
